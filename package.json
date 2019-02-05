@@ -1,0 +1,33 @@
+{
+    "name": "302cem-course-work-back-end",
+    "version": "0.0.1",
+    "description": "Web API for 302CEM Course Work",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon index.js",
+        "lint": "for file in $(find . -type f -name '*.js' | grep -vE './node_modules|./docs|./coverage'); do eslint $file; done",
+        "start": "node index.js || nodejs index.js",
+        "test": "jest",
+        "document": "jsdoc --configure jsdoc.json --destination docs"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.coventry.ac.uk/leej64/302CEM-Course-Work"
+    },
+    "author": "James Lee",
+    "license": "GPL-3.0-or-later",
+    "devDependencies": {
+        "eslint": "^5.13.0",
+        "jest": "^24.0.0",
+        "jsdoc": "^3.5.5",
+        "jsdoc-route-plugin": "^0.1.0",
+        "nodemon": "^1.18.9"
+    },
+    "dependencies": {
+        "better-sqlite3": "^5.4.0",
+        "cors": "^2.8.5",
+        "express": "^4.16.4",
+        "mqtt": "^2.18.8",
+        "socket.io": "^2.2.0"
+    }
+}
