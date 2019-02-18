@@ -19,32 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const cors = require('cors')
-const express = require('express')
-const http = require('http')
-const socket_io = require('socket.io')
-
-const config = require('./src/config')
-const mqtt = require('./src/mqtt')
-
-const app = express()
-
-app.use(cors())
-
-const server = http.Server(app)
-const io = socket_io(server)
-
-const routes = require('./src/routes')
-
-// Initialise the mqtt tunnel
-mqtt.tunnel(io)
-
-// Record sensor history from mqtt
-mqtt.collate()
-
-// Base all routes on the api route
-app.use('/api', routes)
-
-const api = server.listen(config.server.port, () => {
-    console.log('Server is listening on port ' + api.address().port)
-})
+module.exports = {
+    name: 'sensor-data.sqlite3'
+}

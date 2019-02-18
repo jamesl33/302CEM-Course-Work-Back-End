@@ -17,22 +17,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-const mqtt = require('mqtt')
+const collate = require('./collate.js')
+const tunnel = require('./tunnel.js')
 
-const config = require('../config.js')
-
-const client = mqtt.connect(config.mqtt)
-
-client.on('connect', () => {
-    client.subscribe('302CEM/bear/#', (err) => {
-        if (err) {
-            console.log(err)
-        }
-    })
-})
-
-// TODO(James Lee) - Forward the message to the web interface using websockets
-// TODO(James Lee) - Save the message into the sensor-data database
-client.on('message', (topic, message) => {
-    console.log(topic, ': ', message.toString())
+module.exports = Object.assign({}, {
+    collate: collate,
+    tunnel: tunnel
 })

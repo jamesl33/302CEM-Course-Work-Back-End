@@ -19,32 +19,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const cors = require('cors')
-const express = require('express')
-const http = require('http')
-const socket_io = require('socket.io')
+const mqtt = require('mqtt')
 
-const config = require('./src/config')
-const mqtt = require('./src/mqtt')
+const database = require('../database')
 
-const app = express()
+const config = require('../config')
 
-app.use(cors())
+module.exports = () => {
+    const client = mqtt.connect(config.mqtt)
 
-const server = http.Server(app)
-const io = socket_io(server)
+    client.on('connect', () => {
+        client.subscribe('302CEM/bear/#', (err) => {
+            if (err) {
+                console.log(err)
+            }
+        })
+    })
 
-const routes = require('./src/routes')
-
-// Initialise the mqtt tunnel
-mqtt.tunnel(io)
-
-// Record sensor history from mqtt
-mqtt.collate()
-
-// Base all routes on the api route
-app.use('/api', routes)
-
-const api = server.listen(config.server.port, () => {
-    console.log('Server is listening on port ' + api.address().port)
-})
+    client.on('message', (topic, message) => {
+        // TODO(James Lee) - Switch on topic and insert data into database
+    })
+}

@@ -22,17 +22,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 const fs = require('fs')
 const sqlite = require('better-sqlite3')
 
-const config = require('../config.js')
+const sensors = require('./sensors.js')
+
+const config = require('../config')
 
 module.exports = Object.assign({}, {
     createDatabase: () => {
         const db = new sqlite(config.database.name)
 
         db.prepare('create table sensors (id integer primary key not null, type text not null)').run()
-        db.prepare('create table history (id integer not null, timestamp integer not null, value integer, foreign key(id) references sensors(id))')
+        db.prepare('create table history (id integer not null, timestamp integer not null, value integer, foreign key(id) references sensors(id))').run()
 
         db.close()
-    }
+    },
+    sensors: sensors
 })
 
 if (!fs.existsSync(config.database.name)) {

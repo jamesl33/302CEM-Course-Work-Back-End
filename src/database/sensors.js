@@ -17,21 +17,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-const fs = require('fs')
+'use strict'
+
+const sqlite = require('better-sqlite3')
+
+const config = require('../config')
 
 module.exports = {
-    database: {
-        name: 'sensor-data.sqlite3'
-    },
-    server: {
-        port: 8080
-    },
-    mqtt: {
-        cert: fs.readFileSync('mqtt.coventry.ac.uk.crt'),
-        host: 'mqtt.coventry.ac.uk',
-        password: 'n3fXXFZrjw',
-        port: 8883,
-        protocol: 'mqtts',
-        username: '302CEM'
+    add_data: (id, type, data) => {
+        const db = new sqlite(config.database.name)
+
+        const sensor = db.prepare('select * from sensors where id = ?').get(id)
+
+        if (sensor === undefined) {
+            db.prepare('insert into sensors values (?, ?)').run(
+                id,
+                type
+            )
+        }
+
+        db.prepare('insert into history values (?, ?, ?)').run(id, (new Date).getTime(), data)
+
+        db.close()
     }
 }
