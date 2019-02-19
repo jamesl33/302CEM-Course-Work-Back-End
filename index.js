@@ -41,9 +41,6 @@ const routes = require('./src/routes')
 // Initialise the mqtt tunnel
 mqtt.tunnel(io)
 
-// Record sensor history from mqtt
-mqtt.collate()
-
 // Base all routes on the api route
 app.use('/api', routes)
 

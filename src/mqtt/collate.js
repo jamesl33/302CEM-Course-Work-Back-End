@@ -25,18 +25,16 @@ const database = require('../database')
 
 const config = require('../config')
 
-module.exports = () => {
-    const client = mqtt.connect(config.mqtt)
+const client = mqtt.connect(config.mqtt)
 
-    client.on('connect', () => {
-        client.subscribe('302CEM/bear/#', (err) => {
-            if (err) {
-                console.log(err)
-            }
-        })
+client.on('connect', () => {
+    client.subscribe('302CEM/bear/#', (err) => {
+        if (err) {
+            console.log(err)
+        }
     })
+})
 
-    client.on('message', (topic, message) => {
-        // TODO(James Lee) - Switch on topic and insert data into database
-    })
-}
+client.on('message', (topic, message) => {
+    // TODO(James Lee) - Switch on topic and insert data into database
+})
