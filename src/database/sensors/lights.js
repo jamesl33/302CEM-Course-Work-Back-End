@@ -19,26 +19,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const fs = require('fs')
 const sqlite = require('better-sqlite3')
 
-const sensors = require('./sensors')
+const config = require('../../config')
 
-const config = require('../config')
-
-module.exports = Object.assign({}, {
-    createDatabase: () => {
+module.exports = {
+    getTimeout: (id) => {
         const db = new sqlite(config.database.name)
 
-        db.prepare('create table sensors (id integer primary key not null, type text not null)').run()
-        db.prepare('create table history (id integer not null, timestamp integer not null, value integer, foreign key(id) references sensors(id))').run()
-        db.prepare('create table lights (id integer not null, timeout integer not null, foreign key(id) references sensors(id))').run()
+        const row = db.prepare('select * from lights where id = ?').get(id)
 
         db.close()
-    },
-    sensors: sensors
-})
 
-if (!fs.existsSync(config.database.name)) {
-    module.exports.createDatabase()
+        if (row === undefined) {
+            throw new Error('Light sensor doesn\'t exist')
+        }
+
+        return row.timeout
+    },
+    setTimeout: (id, timeout) => {
+        const db = new sqlite(config.database.name)
+
+        const row = db.prepare('select * from lights where id = ?').get(id)
+
+        if (row === undefined) {
+            throw new Error('Light sensor doesn\'t exist')
+        }
+
+        if (timeout !== row.timeout) {
+            db.prepare('update lights set timeout = ? where id = ?').run(timeout, id)
+        }
+
+        db.close()
+    }
 }

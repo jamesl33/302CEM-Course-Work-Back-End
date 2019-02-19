@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const database = require('./database.js')
-const server = require('./server.js')
-const mqtt = require('./mqtt.js')
+const database = require('./database')
+const server = require('./server')
+const mqtt = require('./mqtt')
 
 module.exports = {
     database: database,

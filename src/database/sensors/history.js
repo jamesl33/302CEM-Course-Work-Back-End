@@ -19,10 +19,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const router = require('express').Router()
+const sqlite = require('better-sqlite3')
 
-const sensors = require('./sensors')
+const config = require('../../config')
 
-router.use('/sensors', sensors)
+module.exports = {
+    addData: (id, type, data) => {
+        const db = new sqlite(config.database.name)
 
-module.exports = router
+        const sensor = db.prepare('select * from sensors where id = ?').get(id)
+
+        if (sensor === undefined) {
+            db.prepare('insert into sensors values (?, ?)').run(
+                id,
+                type
+            )
+        }
+
+        db.prepare('insert into history values (?, ?, ?)').run(id, (new Date).getTime(), data)
+
+        db.close()
+    }
+}

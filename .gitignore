@@ -61,4 +61,4 @@ typings/
 .next
 
 # Sensor history database
-sensor-data.sqlite3
+sensors.sqlite3

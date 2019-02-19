@@ -21,8 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 const router = require('express').Router()
 
-const sensors = require('./sensors')
+const lights = require('./lights')
 
-router.use('/sensors', sensors)
+router.use('/lights', lights)
 
 module.exports = router

@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
 const http = require('http')
@@ -29,6 +30,7 @@ const mqtt = require('./src/mqtt')
 
 const app = express()
 
+app.use(bodyParser.json())
 app.use(cors())
 
 const server = http.Server(app)

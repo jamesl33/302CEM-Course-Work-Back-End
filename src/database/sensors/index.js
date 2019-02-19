@@ -19,25 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const sqlite = require('better-sqlite3')
-
-const config = require('../config')
+const history = require('./history')
+const lights = require('./lights')
 
 module.exports = {
-    add_data: (id, type, data) => {
-        const db = new sqlite(config.database.name)
-
-        const sensor = db.prepare('select * from sensors where id = ?').get(id)
-
-        if (sensor === undefined) {
-            db.prepare('insert into sensors values (?, ?)').run(
-                id,
-                type
-            )
-        }
-
-        db.prepare('insert into history values (?, ?, ?)').run(id, (new Date).getTime(), data)
-
-        db.close()
-    }
+    history: history,
+    lights: lights
 }
