@@ -24,17 +24,8 @@ const sqlite = require('better-sqlite3')
 const config = require('../../config')
 
 module.exports = {
-    addData: (id, type, data) => {
+    log: (id, data) => {
         const db = new sqlite(config.database.name)
-
-        const sensor = db.prepare('select * from sensors where id = ?').get(id)
-
-        if (sensor === undefined) {
-            db.prepare('insert into sensors values (?, ?)').run(
-                id,
-                type
-            )
-        }
 
         db.prepare('insert into history values (?, ?, ?)').run(id, (new Date).getTime(), data)
 

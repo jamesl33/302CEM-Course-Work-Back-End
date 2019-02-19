@@ -36,5 +36,16 @@ client.on('connect', () => {
 })
 
 client.on('message', (topic, message) => {
-    // TODO(James Lee) - Switch on topic and insert data into database
+    const sensor = {
+        id: parseInt(topic.match(/(?<=sensor_)(\d+)/).pop()),
+        type: topic.match(/(?<=sensor_)(.+?(?=\/))/).pop()
+    }
+
+    try {
+        database.sensors.findById(sensor.id)
+    } catch (err) {
+        database.sensors.add(sensor)
+    }
+
+    database.sensors.history.log(sensor.id, message.toString())
 })

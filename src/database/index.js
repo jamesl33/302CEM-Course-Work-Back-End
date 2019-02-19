@@ -31,7 +31,7 @@ module.exports = Object.assign({}, {
         const db = new sqlite(config.database.name)
 
         db.prepare('create table sensors (id integer primary key not null, type text not null)').run()
-        db.prepare('create table history (id integer not null, timestamp integer not null, value integer, foreign key(id) references sensors(id))').run()
+        db.prepare('create table history (id integer not null, timestamp integer not null, value integer not null, foreign key(id) references sensors(id))').run()
         db.prepare('create table lights (id integer not null, timeout integer not null, foreign key(id) references sensors(id))').run()
 
         db.close()
