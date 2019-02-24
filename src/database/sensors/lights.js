@@ -24,6 +24,10 @@ const sqlite = require('better-sqlite3')
 const config = require('../../config')
 
 module.exports = {
+    /**
+     * @description Get the timeout for a light sensor
+     * @param {Integer} id - The id of a light sensor in the database
+     */
     getTimeout: (id) => {
         const db = new sqlite(config.database.name)
 
@@ -37,6 +41,11 @@ module.exports = {
 
         return row.timeout
     },
+    /**
+     * @description Set the timeout for a light sensor
+     * @param {Integer} id - The id of the light sensor we are modifying
+     * @param {Integer} timeout - The new timeout value
+     */
     setTimeout: (id, timeout) => {
         const db = new sqlite(config.database.name)
 

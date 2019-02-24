@@ -24,6 +24,11 @@ const sqlite = require('better-sqlite3')
 const config = require('../../config')
 
 module.exports = {
+    /**
+     * @description Log some sensor data in the database
+     * @param {Integer} id - The id of the sensor in the database
+     * @param {Integer} data - The value read from the sensor
+     */
     log: (id, data) => {
         const db = new sqlite(config.database.name)
 

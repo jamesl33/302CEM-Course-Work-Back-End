@@ -23,6 +23,12 @@ const router = require('express').Router()
 
 const database = require('../../database')
 
+/**
+ * @name timeout
+ * @description Get the timeout for a light sensor
+ * @route {GET} /timeout
+ * @queryparam {Integer} - The id of a light sensor in the database
+ */
 router.get('/timeout', (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
@@ -43,6 +49,13 @@ router.get('/timeout', (req, res) => {
     })
 })
 
+/**
+ * @name timeout
+ * @description Set the timeout for a light sensor
+ * @route {POST} /timeout
+ * @bodyparam {Integer} id - The id of the light, whose timeout we are setting
+ * @bodyparam {Integer} timeout - The value to be set as the new timeout
+ */
 router.post('/timeout', (req, res) => {
     if (req.body.id === undefined || req.body.timeout === undefined) {
         // The user didn't send enough data in the query params

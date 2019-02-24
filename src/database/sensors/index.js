@@ -27,6 +27,10 @@ const history = require('./history')
 const lights = require('./lights')
 
 module.exports = {
+    /**
+     * @description Add a new sensor to the database
+     * @param {Object} sensor - The sensor to be added to the database
+     */
     add: (sensor) => {
         const db = sqlite(config.database.name)
 
@@ -34,6 +38,10 @@ module.exports = {
 
         db.close()
     },
+    /**
+     * @description Search the database for a sensor by it's id
+     * @param {Integer} - The id of a sensor in the database
+     */
     findById: (id) => {
         const db = sqlite(config.database.name)
 
