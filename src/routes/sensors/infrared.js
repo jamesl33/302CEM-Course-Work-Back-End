@@ -19,33 +19,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const mqtt = require('mqtt')
+const router = require('express').Router()
 
-const database = require('../database')
+const database = require('../../database')
 
-const config = require('../config')
+router.get('/lastOn', (req, res) => {
+    const timestamp = database.sensors.infrared.lastOn()
 
-const client = mqtt.connect(config.mqtt)
-
-client.on('connect', () => {
-    client.subscribe('302CEM/bear/#', (err) => {
-        if (err) {
-            console.log(err)
-        }
+    res.send({
+        timestamp: timestamp
     })
 })
 
-client.on('message', (topic, message) => {
-    const sensor = {
-        id: parseInt(topic.match(/(?<=sensor_)(\d+)/).pop()),
-        type: topic.match(/(?<=sensor_)(.+?(?=\/))/).pop()
-    }
+router.get('/lastOff', (req, res) => {
+    const timestamp = database.sensors.infrared.lastOff()
 
-    try {
-        database.sensors.find(sensor)
-    } catch (err) {
-        database.sensors.add(sensor)
-    }
-
-    database.sensors.history.log(sensor.id, message.toString())
+    res.send({
+        timestamp: timestamp
+    })
 })
+
+module.exports = router

@@ -21,8 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 const router = require('express').Router()
 
+const infrared = require('./infrared')
 const light = require('./light')
 
+router.use('/infrared', infrared)
 router.use('/light', light)
 
 module.exports = router

@@ -23,40 +23,31 @@ const sqlite = require('better-sqlite3')
 
 const config = require('../../config')
 
-const history = require('./history')
-const infrared = require('./infrared')
-const light = require('./light')
-
 module.exports = {
-    /**
-     * @description Add a new sensor to the database
-     * @param {Object} sensor - The sensor to be added to the database
-     */
-    add: (sensor) => {
+    lastOn: () => {
         const db = new sqlite(config.database.name)
 
-        db.prepare('insert into sensors values(?, ?)').run(sensor.id, sensor.type)
-
-        db.close()
-    },
-    /**
-     * @description Search the database for a sensor
-     * @param {Integer} - A sensor object
-     */
-    find: (sensor) => {
-        const db = new sqlite(config.database.name)
-
-        const row = db.prepare('select * from sensors where id = ? and type = ?').get(sensor.id, sensor.type)
+        const row = db.prepare('select max(history.timestamp) from sensors join history on sensors.id = history.id where sensors.type = "infrared" and history.value != 0').get()
 
         db.close()
 
         if (row === undefined) {
-            throw new Error('Sensor doesn\'t exist')
+            throw new Error('Infrared sensor doesn\'t exist')
         }
 
-        return row
+        return row['max(history.timestamp)']
     },
-    history: history,
-    infrared: infrared,
-    light: light
+    lastOff: () => {
+        const db = new sqlite(config.database.name)
+
+        const row = db.prepare('select max(history.timestamp) from sensors join history on sensors.id = history.id where sensors.type = "infrared" and history.value != 1').get()
+
+        db.close()
+
+        if (row === undefined) {
+            throw new Error('Infrared sensor doesn\'t exist')
+        }
+
+        return row['max(history.timestamp)']
+    }
 }
