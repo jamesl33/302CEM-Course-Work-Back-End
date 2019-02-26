@@ -25,10 +25,10 @@ const config = require('../../config')
 
 module.exports = {
     /**
-     * @description Get the timeout for a light sensor
+     * @description Get the threshold for a light sensor
      * @param {Integer} id - The id of a light sensor in the database
      */
-    getTimeout: (id) => {
+    getThreshold: (id) => {
         const db = new sqlite(config.database.name)
 
         const row = db.prepare('select * from lights where id = ?').get(id)
@@ -39,14 +39,14 @@ module.exports = {
             throw new Error('Light sensor doesn\'t exist')
         }
 
-        return row.timeout
+        return row.threshold
     },
     /**
-     * @description Set the timeout for a light sensor
+     * @description Set the threshold for a light sensor
      * @param {Integer} id - The id of the light sensor we are modifying
-     * @param {Integer} timeout - The new timeout value
+     * @param {Integer} threshold - The new threshold value
      */
-    setTimeout: (id, timeout) => {
+    setThreshold: (id, threshold) => {
         const db = new sqlite(config.database.name)
 
         const row = db.prepare('select * from lights where id = ?').get(id)
@@ -55,8 +55,8 @@ module.exports = {
             throw new Error('Light sensor doesn\'t exist')
         }
 
-        if (timeout !== row.timeout) {
-            db.prepare('update lights set timeout = ? where id = ?').run(timeout, id)
+        if (threshold !== row.threshold) {
+            db.prepare('update lights set threshold = ? where id = ?').run(threshold, id)
         }
 
         db.close()

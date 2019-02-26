@@ -24,46 +24,46 @@ const router = require('express').Router()
 const database = require('../../database')
 
 /**
- * @name timeout
- * @description Get the timeout for a light sensor
- * @route {GET} /timeout
+ * @name threshold
+ * @description Get the activation threshold for a light sensor
+ * @route {GET} /threshold
  * @queryparam {Integer} - The id of a light sensor in the database
  */
-router.get('/timeout', (req, res) => {
+router.get('/threshold', (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(400)
     }
 
-    let timeout = undefined
+    let threshold = undefined
 
     try {
-        timeout = database.sensors.lights.getTimeout(req.query.id)
+        threshold = database.sensors.lights.getThreshold(req.query.id)
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(400)
     }
 
     return res.send({
-        timeout: timeout
+        threshold: threshold
     })
 })
 
 /**
- * @name timeout
- * @description Set the timeout for a light sensor
- * @route {POST} /timeout
- * @bodyparam {Integer} id - The id of the light, whose timeout we are setting
- * @bodyparam {Integer} timeout - The value to be set as the new timeout
+ * @name threshold
+ * @description Set the activation threshold for a light sensor
+ * @route {POST} /threshold
+ * @bodyparam {Integer} id - The id of the light, whose threshold we are setting
+ * @bodyparam {Integer} threshold - The value to be set as the new threshold
  */
-router.post('/timeout', (req, res) => {
-    if (req.body.id === undefined || req.body.timeout === undefined) {
+router.post('/threshold', (req, res) => {
+    if (req.body.id === undefined || req.body.threshold === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(400)
     }
 
     try {
-        database.sensors.lights.setTimeout(req.body.id, req.body.timeout)
+        database.sensors.lights.setThreshold(req.body.id, req.body.threshold)
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(400)

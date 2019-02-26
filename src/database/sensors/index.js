@@ -24,7 +24,7 @@ const sqlite = require('better-sqlite3')
 const config = require('../../config')
 
 const history = require('./history')
-const lights = require('./lights')
+const light = require('./light')
 
 module.exports = {
     /**
@@ -56,5 +56,5 @@ module.exports = {
         return row
     },
     history: history,
-    lights: lights
+    light: light
 }
