@@ -32,16 +32,16 @@ const database = require('../../database')
 router.get('/threshold', (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
-        return res.sendStatus(400)
+        return res.sendStatus(422)
     }
 
     let threshold = undefined
 
     try {
-        threshold = database.sensors.lights.getThreshold(req.query.id)
+        threshold = database.sensors.light.getThreshold(req.query.id)
     } catch (err) {
         // The requested light sensor was not found
-        return res.sendStatus(400)
+        return res.sendStatus(422)
     }
 
     return res.send({
@@ -59,14 +59,14 @@ router.get('/threshold', (req, res) => {
 router.post('/threshold', (req, res) => {
     if (req.body.id === undefined || req.body.threshold === undefined) {
         // The user didn't send enough data in the query params
-        return res.sendStatus(400)
+        return res.sendStatus(422)
     }
 
     try {
-        database.sensors.lights.setThreshold(req.body.id, req.body.threshold)
+        database.sensors.light.setThreshold(req.body.id, req.body.threshold)
     } catch (err) {
         // The requested light sensor was not found
-        return res.sendStatus(400)
+        return res.sendStatus(422)
     }
 
     return res.sendStatus(204)

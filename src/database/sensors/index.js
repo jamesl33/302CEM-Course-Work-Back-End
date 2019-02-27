@@ -37,6 +37,11 @@ module.exports = {
 
         db.prepare('insert into sensors values(?, ?)').run(sensor.id, sensor.type)
 
+        switch (sensor.type) {
+            case 'light':
+                db.prepare('insert into light values(?, 10000)').run(sensor.id)
+        }
+
         db.close()
     },
     /**

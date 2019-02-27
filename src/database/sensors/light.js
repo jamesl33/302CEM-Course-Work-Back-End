@@ -31,7 +31,7 @@ module.exports = {
     getThreshold: (id) => {
         const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from lights where id = ?').get(id)
+        const row = db.prepare('select * from light where id = ?').get(id)
 
         db.close()
 
@@ -49,14 +49,14 @@ module.exports = {
     setThreshold: (id, threshold) => {
         const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from lights where id = ?').get(id)
+        const row = db.prepare('select * from sensors where id = ?').get(id)
 
         if (row === undefined) {
             throw new Error('Light sensor doesn\'t exist')
         }
 
         if (threshold !== row.threshold) {
-            db.prepare('update lights set threshold = ? where id = ?').run(threshold, id)
+            db.prepare('update light set threshold = ? where id = ?').run(threshold, id)
         }
 
         db.close()
