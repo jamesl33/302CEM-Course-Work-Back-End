@@ -61,6 +61,28 @@ module.exports = {
 
         return row
     },
+    /**
+     * @description Get all the user defined preferences for the sensors
+     */
+    preferences: () => {
+        const db = new sqlite(config.database.name)
+
+        const light_sensors = db.prepare('select * from light').all()
+
+        db.close()
+
+        const preferences = {
+            light: {}
+        }
+
+        if (light_sensors !== undefined) {
+            Object.assign(preferences, {
+                light: light_sensors
+            })
+        }
+
+        return preferences
+    },
     history: history,
     infrared: infrared,
     light: light

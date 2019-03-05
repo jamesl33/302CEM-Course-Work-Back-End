@@ -19,10 +19,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
+const database = require('../../database')
+
 const router = require('express').Router()
 
 const infrared = require('./infrared')
 const light = require('./light')
+
+/**
+ * @name preferences
+ * @description Get all the user defined preferences for the sensors
+ * @route {GET} /preferences
+ */
+router.get('/preferences', (req, res) => {
+    res.send(database.sensors.preferences())
+})
 
 router.use('/infrared', infrared)
 router.use('/light', light)
