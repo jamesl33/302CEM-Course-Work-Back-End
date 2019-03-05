@@ -38,8 +38,12 @@ module.exports = {
         db.prepare('insert into sensors values(?, ?)').run(sensor.id, sensor.type)
 
         switch (sensor.type) {
+            case 'infrared':
+                db.prepare('insert into infrared values(?, 60)').run(sensor.id)
+                break;
             case 'light':
                 db.prepare('insert into light values(?, 10000)').run(sensor.id)
+                break;
         }
 
         db.close()
@@ -68,6 +72,7 @@ module.exports = {
         const db = new sqlite(config.database.name)
 
         const light_sensors = db.prepare('select * from light').all()
+        const infrared_sensors = db.prepare('select * from infrared').all()
 
         db.close()
 
@@ -78,6 +83,12 @@ module.exports = {
         if (light_sensors !== undefined) {
             Object.assign(preferences, {
                 light: light_sensors
+            })
+        }
+
+        if (infrared_sensors !== undefined) {
+            Object.assign(preferences, {
+                infrared: infrared_sensors
             })
         }
 

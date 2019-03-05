@@ -37,8 +37,8 @@ client.on('connect', () => {
 
 client.on('message', (topic, message) => {
     const sensor = {
-        id: parseInt(topic.match(/(?<=sensor_)(\d+)/).pop()),
-        type: topic.match(/(?<=sensor_)(.+?(?=\/))/).pop()
+        id: parseInt(topic.match(/(?<=sensor_)(\d)/).pop()),
+        type: topic.match(/(?<=sensor_)([a-zA-z]+)/).pop()
     }
 
     try {
