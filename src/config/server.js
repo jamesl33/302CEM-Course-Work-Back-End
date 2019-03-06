@@ -19,6 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
+const fs = require('fs')
+
 module.exports = {
+    options: {
+        cert: fs.readFileSync('agiledevbear.ddns.net.crt'),
+        key: fs.readFileSync('agiledevbear.ddns.net.key')
+    },
     port: 8080
 }

@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
-const http = require('http')
+const https = require('https')
 const socket_io = require('socket.io')
 
 const config = require('./src/config')
@@ -33,7 +33,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
-const server = http.Server(app)
+const server = https.Server(config.server.options, app)
 const io = socket_io(server)
 
 const routes = require('./src/routes')
