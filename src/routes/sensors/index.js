@@ -25,6 +25,7 @@ const router = require('express').Router()
 
 const infrared = require('./infrared')
 const light = require('./light')
+const temperature = require('./temperature')
 
 /**
  * @name preferences
@@ -37,5 +38,6 @@ router.get('/preferences', (req, res) => {
 
 router.use('/infrared', infrared)
 router.use('/light', light)
+router.use('/temperature', temperature)
 
 module.exports = router

@@ -44,6 +44,9 @@ module.exports = {
             case 'light':
                 db.prepare('insert into light values(?, 10000)').run(sensor.id)
                 break;
+            case 'temperature':
+                db.prepare('insert into temperature values(?, 0, 10000)').run(sensor.id)
+                break;
         }
 
         db.close()

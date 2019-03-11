@@ -34,6 +34,7 @@ module.exports = Object.assign({}, {
         db.prepare('create table history (id integer not null, timestamp integer not null, value integer not null, foreign key(id) references sensors(id))').run()
         db.prepare('create table infrared (id integer not null, timeout integer not null, foreign key(id) references sensors(id))').run()
         db.prepare('create table light (id integer not null, threshold integer not null, foreign key(id) references sensors(id))').run()
+        db.prepare('create table temperature (id integer not null, lowerThreshold real not null, higherThreshold real not null, foreign key(id) references sensors(id))').run()
 
         db.close()
     },
