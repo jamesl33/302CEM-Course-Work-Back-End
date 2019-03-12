@@ -26,6 +26,7 @@ const config = require('../../config')
 const history = require('./history')
 const infrared = require('./infrared')
 const light = require('./light')
+const temperature = require('./temperature')
 
 module.exports = {
     /**
@@ -99,5 +100,6 @@ module.exports = {
     },
     history: history,
     infrared: infrared,
-    light: light
+    light: light,
+    temperature: temperature
 }

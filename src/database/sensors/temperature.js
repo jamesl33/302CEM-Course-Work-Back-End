@@ -85,7 +85,7 @@ module.exports = {
     setLowerThreshold: (id, threshold) => {
         const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from sensors where id = ?').get(id)
+        const row = db.prepare('select * from temperature where id = ?').get(id)
 
         if (row === undefined) {
             throw new Error('Temperature sensor doesn\'t exist')
@@ -104,7 +104,7 @@ module.exports = {
     setHigherThreshold: (id, threshold) => {
         const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from sensors where id = ?').get(id)
+        const row = db.prepare('select * from temperature where id = ?').get(id)
 
         if (row === undefined) {
             throw new Error('Temperature sensor doesn\'t exist')
@@ -125,7 +125,7 @@ module.exports = {
     setThreshold: (id, lowerThreshold, higherThreshold) => {
         const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from sensors where id = ?').get(id)
+        const row = db.prepare('select * from temperature where id = ?').get(id)
 
         if (row === undefined) {
             throw new Error('Temperature sensor doesn\'t exist')
