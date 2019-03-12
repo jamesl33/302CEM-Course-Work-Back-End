@@ -24,12 +24,64 @@ const router = require('express').Router()
 const database = require('../../database')
 
 /**
+ * @name threshold/min
+ * @description Get the lower threshold for a temperature sensor
+ * @route {GET} /threshold/min
+ * @queryparam {Integer} - The id of a temperature sensor in the database
+ */
+router.get('/threshold/min', (req, res) => {
+    if (req.query.id === undefined) {
+        // The user didn't send enough data in the query params
+        return res.sendStatus(422)
+    }
+
+    let threshold = undefined
+
+    try {
+        threshold = database.sensors.temperature.getLowerThreshold(req.query.id)
+    } catch (err) {
+        // The requested light sensor was not found
+        return res.sendStatus(422)
+    }
+
+    return res.send({
+        threshold: threshold
+    })
+})
+
+/**
+ * @name threshold/max
+ * @description Get the higher threshold for a temperature sensor
+ * @route {GET} /threshold/max
+ * @queryparam {Integer} - The id of a temperature sensor in the database
+ */
+router.get('/threshold/max', (req, res) => {
+    if (req.query.id === undefined) {
+        // The user didn't send enough data in the query params
+        return res.sendStatus(422)
+    }
+
+    let threshold = undefined
+
+    try {
+        threshold = database.sensors.temperature.getHigherThreshold(req.query.id)
+    } catch (err) {
+        // The requested light sensor was not found
+        return res.sendStatus(422)
+    }
+
+    return res.send({
+        threshold: threshold
+    })
+})
+
+/**
  * @name thresholds
  * @description Get the activation threshold for a temperature sensor
  * @route {GET} /thresholds
  * @queryparam {Integer} - The id of a temperature sensor in the database
  */
-router.get('/threshold', (req, res) => {
+router.get('/thresholds', (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -48,6 +100,52 @@ router.get('/threshold', (req, res) => {
 })
 
 /**
+ * @name threshold/min
+ * @description Set the lower threshold for a temperature sensor
+ * @route {POST} /threshold/min
+ * @bodyparam {Integer} - The id of the temperature sensor in the database
+ * @bodyparam {Float} - The new lower threshold
+ */
+router.post('/threshold/min', (req, res) => {
+    if (req.body.id === undefined || req.body.threshold === undefined) {
+        // The user didn't send enough data in the query params
+        return res.sendStatus(422)
+    }
+
+    try {
+        database.sensors.temperature.setLowerThreshold(req.body.id, req.body.threshold)
+    } catch (err) {
+        // The requested light sensor was not found
+        return res.sendStatus(422)
+    }
+
+    return res.sendStatus(204)
+})
+
+/**
+ * @name threshold/max
+ * @description Set the higher threshold for a temperature sensor
+ * @route {POST} /threshold/max
+ * @bodyparam {Integer} - The id of the temperature sensor in the database
+ * @bodyparam {Float} - The new higher threshold
+ */
+router.post('/threshold/max', (req, res) => {
+    if (req.body.id === undefined || req.body.threshold === undefined) {
+        // The user didn't send enough data in the query params
+        return res.sendStatus(422)
+    }
+
+    try {
+        database.sensors.temperature.setHigherThreshold(req.body.id, req.body.threshold)
+    } catch (err) {
+        // The requested light sensor was not found
+        return res.sendStatus(422)
+    }
+
+    return res.sendStatus(204)
+})
+
+/**
  * @name thresholds
  * @description Set the activation threshold for a temperature sensor
  * @route {POST} /thresholds
@@ -55,7 +153,7 @@ router.get('/threshold', (req, res) => {
  * @bodyparam {Integer} lowerThrehold - The value to be set as the new lowerThrehold
  * @bodyparam {Integer} higherThrehold - The value to be set as the new higherThreshold
  */
-router.post('/threshold', (req, res) => {
+router.post('/thresholds', (req, res) => {
     if (req.body.id === undefined || req.body.lowerThrehold === undefined || req.body.higherThreshold === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
