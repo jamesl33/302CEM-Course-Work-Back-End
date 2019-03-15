@@ -75,13 +75,20 @@ module.exports = {
     preferences: () => {
         const db = new sqlite(config.database.name)
 
-        const light_sensors = db.prepare('select * from light').all()
         const infrared_sensors = db.prepare('select * from infrared').all()
+        const light_sensors = db.prepare('select * from light').all()
+        const temperature_sensors = db.prepare('select * from temperature').all()
 
         db.close()
 
         const preferences = {
             light: {}
+        }
+
+        if (infrared_sensors !== undefined) {
+            Object.assign(preferences, {
+                infrared: infrared_sensors
+            })
         }
 
         if (light_sensors !== undefined) {
@@ -90,9 +97,9 @@ module.exports = {
             })
         }
 
-        if (infrared_sensors !== undefined) {
+        if (temperature_sensors !== undefined) {
             Object.assign(preferences, {
-                infrared: infrared_sensors
+                temperature: temperature_sensors
             })
         }
 
