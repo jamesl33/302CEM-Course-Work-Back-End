@@ -35,18 +35,14 @@ router.get('/threshold', (req, res) => {
         return res.sendStatus(422)
     }
 
-    let threshold = undefined
-
     try {
-        threshold = database.sensors.light.getThreshold(req.query.id)
+        return res.send({
+            threshold: database.sensors.light.getThreshold(req.query.id)
+        })
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)
     }
-
-    return res.send({
-        threshold: threshold
-    })
 })
 
 /**

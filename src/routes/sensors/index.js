@@ -23,6 +23,7 @@ const database = require('../../database')
 
 const router = require('express').Router()
 
+const history = require('./history')
 const infrared = require('./infrared')
 const light = require('./light')
 const temperature = require('./temperature')
@@ -36,6 +37,7 @@ router.get('/preferences', (req, res) => {
     res.send(database.sensors.preferences())
 })
 
+router.use('/history', history)
 router.use('/infrared', infrared)
 router.use('/light', light)
 router.use('/temperature', temperature)

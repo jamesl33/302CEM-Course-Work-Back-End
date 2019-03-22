@@ -35,5 +35,61 @@ module.exports = {
         db.prepare('insert into history values (?, ?, ?)').run(id, (new Date).getTime(), data)
 
         db.close()
+    },
+    /**
+     * @description Fetch a set of historical data from the database by the
+     * sensor id.
+     * @param {Integer} id - The id of a sensor in the database.
+     * @param {Integer} min - The lowest time to be collected from the database.
+     * @param {Integer} max - The largest time to be collected from the database.
+     */
+    byId: (id, min, max) => {
+        const db = new sqlite(config.database.name)
+
+        const sensor = db.prepare('select * from sensors where id = ?').get(id)
+
+        if (sensor === undefined) {
+            throw new Error('Sensor doesn\'t exist')
+        }
+
+        const rows = db.prepare('select timestamp, value from history where id = ? and timestamp > ? and timestamp < ?').all(id, min, max)
+
+        let history = []
+
+        rows.map((row) => {
+            history.push(Object.values(row))
+        })
+
+        db.close()
+
+        return history
+    },
+    /**
+     * @description Fetch a set of historical data from the database by the
+     * sensor type.
+     * @param {String} type - A type of sensor stored in the database.
+     * @param {Integer} min - The lowest time to be collected from the database.
+     * @param {Integer} max - The largest time to be collected from the database.
+     */
+    byType: (type, min, max) => {
+        const db = new sqlite(config.database.name)
+
+        const sensors = db.prepare('select * from sensors where type = ?').all(type)
+
+        if (sensors.length === 0) {
+            throw new Error('There are no sensors of type: ' + type)
+        }
+
+        const rows = db.prepare('select timestamp, value from history join sensors on history.id = sensors.id where type = ? and timestamp > ? and timestamp < ?').all(type, min, max)
+
+        let history = []
+
+        rows.map((row) => {
+            history.push(Object.values(row))
+        })
+
+        db.close()
+
+        return history
     }
 }

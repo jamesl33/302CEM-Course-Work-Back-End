@@ -24,18 +24,14 @@ const router = require('express').Router()
 const database = require('../../database')
 
 router.get('/lastOn', (req, res) => {
-    const timestamp = database.sensors.infrared.lastOn()
-
     res.send({
-        timestamp: timestamp
+        timestamp: database.sensors.infrared.lastOn()
     })
 })
 
 router.get('/lastOff', (req, res) => {
-    const timestamp = database.sensors.infrared.lastOff()
-
     res.send({
-        timestamp: timestamp
+        timestamp: database.sensors.infrared.lastOff()
     })
 })
 
