@@ -35,18 +35,14 @@ router.get('/threshold/min', (req, res) => {
         return res.sendStatus(422)
     }
 
-    let threshold = undefined
-
     try {
-        threshold = database.sensors.temperature.getLowerThreshold(req.query.id)
+        return res.send({
+            threshold: database.sensors.temperature.getLowerThreshold(req.query.id)
+        })
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)
     }
-
-    return res.send({
-        threshold: threshold
-    })
 })
 
 /**
@@ -61,18 +57,14 @@ router.get('/threshold/max', (req, res) => {
         return res.sendStatus(422)
     }
 
-    let threshold = undefined
-
     try {
-        threshold = database.sensors.temperature.getHigherThreshold(req.query.id)
+        return res.send({
+            threshold: database.sensors.temperature.getHigherThreshold(req.query.id)
+        })
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)
     }
-
-    return res.send({
-        threshold: threshold
-    })
 })
 
 /**
@@ -87,16 +79,14 @@ router.get('/thresholds', (req, res) => {
         return res.sendStatus(422)
     }
 
-    let thresholds = undefined
-
     try {
-        thresholds = database.sensors.temperature.getThreshold(req.query.id)
+        res.send({
+            threshold: database.sensors.temperature.getThreshold(req.query.id)
+        })
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)
     }
-
-    return res.send(thresholds)
 })
 
 /**
