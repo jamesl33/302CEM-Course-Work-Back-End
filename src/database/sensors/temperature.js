@@ -36,7 +36,7 @@ module.exports = {
 
             db.close()
 
-            if (!sensor) {
+            if (sensor == null) {
                 reject(new Error('Temperature sensor doesn\t exit'))
             }
 
@@ -55,7 +55,7 @@ module.exports = {
 
             db.close()
 
-            if (!sensor) {
+            if (sensor == null) {
                 reject(new Error('Temperature sensor doesn\t exit'))
             }
 
@@ -74,7 +74,7 @@ module.exports = {
 
             db.close()
 
-            if (!sensor) {
+            if (sensor == null) {
                 reject(new Error('Temperature sensor doesn\'t exist'))
             }
 
@@ -94,7 +94,7 @@ module.exports = {
 
             const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-            if (!sensor) {
+            if (sensor == null) {
                 reject(new Error('Temperature sensor doesn\'t exist'))
             }
 
@@ -116,7 +116,7 @@ module.exports = {
 
             const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-            if (sensor === undefined) {
+            if (sensor == null) {
                 reject(new Error('Temperature sensor doesn\'t exist'))
             }
 
@@ -140,7 +140,7 @@ module.exports = {
 
             const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-            if (sensor === undefined) {
+            if (sensor == null) {
                 reject(new Error('Temperature sensor doesn\'t exist'))
             }
 

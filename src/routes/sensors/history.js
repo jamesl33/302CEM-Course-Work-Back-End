@@ -32,27 +32,25 @@ const database = require('../../database')
  * @param {Integer} max - The largest time to be collected from the database.
  */
 router.get('/byId', async (req, res) => {
-    if (req.query.id === undefined) {
-        // The user didn't send enough data in the query params
-        return res.sendStatus(422)
+    if (req.query.id == null) {
+        return res.status(422).send({ 'error': 'Missing query parameter: id' })
     }
 
     let min = req.query.min
     let max = req.query.max
 
-    if (min === undefined) {
+    if (min == null) {
         min = 0
     }
 
-    if (max === undefined) {
+    if (max == null) {
         max = (new Date).getTime()
     }
 
     try {
         res.send(await database.sensors.history.byId(req.query.id, min, max))
     } catch (err) {
-        // The requested sensor was not found
-        return res.sendStatus(422)
+        return res.status(422).send({ 'error': err.message })
     }
 })
 
@@ -65,27 +63,25 @@ router.get('/byId', async (req, res) => {
  * @param {Integer} max - The largest time to be collected from the database.
  */
 router.get('/byType', async (req, res) => {
-    if (req.query.type === undefined) {
-        // The user didn't send enough data in the query params
-        return res.sendStatus(422)
+    if (req.query.type == null) {
+        return res.status(422).send({ 'error': 'Missing query parameter: type' })
     }
 
     let min = req.query.min
     let max = req.query.max
 
-    if (min === undefined) {
+    if (min == null) {
         min = 0
     }
 
-    if (max === undefined) {
+    if (max == null) {
         max = (new Date).getTime()
     }
 
     try {
         res.send(await database.sensors.history.byType(req.query.type, min, max))
     } catch (err) {
-        // The requested sensor was not found
-        return res.sendStatus(422)
+        return res.status(422).send({ 'error': err.message })
     }
 })
 
