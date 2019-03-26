@@ -29,92 +29,104 @@ module.exports = {
      * @param {Integer} id - The id of a temperature sensor in the database
      */
     getLowerThreshold: (id) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select lowerThreshold from temperature where id = ?').get(id)
+            const sensor = db.prepare('select lowerThreshold from temperature where id = ?').get(id)
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Temperature sensor doesn\t exit')
-        }
+            if (!sensor) {
+                reject(new Error('Temperature sensor doesn\t exit'))
+            }
 
-        return row.lowerThreshold
+            resolve(sensor.lowerThreshold)
+        })
     },
     /**
      * @description Get the higher threshold for a temperature sensor
      * @param {Integer} id - The id of a temperature sensor in the database
      */
     getHigherThreshold: (id) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select higherThreshold from temperature where id = ?').get(id)
+            const sensor = db.prepare('select higherThreshold from temperature where id = ?').get(id)
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Temperature sensor doesn\t exit')
-        }
+            if (!sensor) {
+                reject(new Error('Temperature sensor doesn\t exit'))
+            }
 
-        return row.higherThreshold
+            resolve(sensor.higherThreshold)
+        })
     },
     /**
      * @description Get the threshold for a temperature sensor
      * @param {Integer} id - The id of a temperature sensor in the database
      */
     getThreshold: (id) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from temperature where id = ?').get(id)
+            const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Temperature sensor doesn\'t exist')
-        }
+            if (!sensor) {
+                reject(new Error('Temperature sensor doesn\'t exist'))
+            }
 
-        return {
-            lowerThreshold: row.lowerThreshold,
-            higherThreshold: row.higherThreshold
-        }
+            resolve({
+                lowerThreshold: sensor.lowerThreshold,
+                higherThreshold: sensor.higherThreshold
+            })
+        })
     },
     /**
      * @description Set the lower threshold for a temperature sensor
      * @param {Integer} id - The id of a temperature sensor in the database
      */
     setLowerThreshold: (id, threshold) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from temperature where id = ?').get(id)
+            const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-        if (row === undefined) {
-            throw new Error('Temperature sensor doesn\'t exist')
-        }
+            if (!sensor) {
+                reject(new Error('Temperature sensor doesn\'t exist'))
+            }
 
-        if (threshold !== row.lowerThreshold) {
-            db.prepare('update temperature set lowerThreshold = ? where id = ?').run(threshold, id)
-        }
+            if (threshold !== sensor.lowerThreshold) {
+                db.prepare('update temperature set lowerThreshold = ? where id = ?').run(threshold, id)
+            }
 
-        db.close()
+            db.close()
+            resolve()
+        })
     },
     /**
      * @description Set the higher threshold for a temperature sensor
      * @param {Integer} id - The id of a temperature sensor in the database
      */
     setHigherThreshold: (id, threshold) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from temperature where id = ?').get(id)
+            const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-        if (row === undefined) {
-            throw new Error('Temperature sensor doesn\'t exist')
-        }
+            if (sensor === undefined) {
+                reject(new Error('Temperature sensor doesn\'t exist'))
+            }
 
-        if (threshold !== row.higherThreshold) {
-            db.prepare('update temperature set higherThreshold = ? where id = ?').run(threshold, id)
-        }
+            if (threshold !== sensor.higherThreshold) {
+                db.prepare('update temperature set higherThreshold = ? where id = ?').run(threshold, id)
+            }
 
-        db.close()
+            db.close()
+            resolve()
+        })
     },
     /**
      * @description Set the threshold for a temperature sensor
@@ -123,22 +135,25 @@ module.exports = {
      * @param {Integer} higherThreshold - The new higher threshold value
      */
     setThreshold: (id, lowerThreshold, higherThreshold) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from temperature where id = ?').get(id)
+            const sensor = db.prepare('select * from temperature where id = ?').get(id)
 
-        if (row === undefined) {
-            throw new Error('Temperature sensor doesn\'t exist')
-        }
+            if (sensor === undefined) {
+                reject(new Error('Temperature sensor doesn\'t exist'))
+            }
 
-        if (lowerThreshold !== row.lowerThreshold) {
-            db.prepare('update temperature set lowerThreshold = ? where id = ?').run(lowerThreshold, id)
-        }
+            if (lowerThreshold !== sensor.lowerThreshold) {
+                db.prepare('update temperature set lowerThreshold = ? where id = ?').run(lowerThreshold, id)
+            }
 
-        if (higherThreshold !== row.higherThreshold) {
-            db.prepare('update temperature set higherThreshold = ? where id = ?').run(higherThreshold, id)
-        }
+            if (higherThreshold !== sensor.higherThreshold) {
+                db.prepare('update temperature set higherThreshold = ? where id = ?').run(higherThreshold, id)
+            }
 
-        db.close()
+            db.close()
+            resolve()
+        })
     }
 }

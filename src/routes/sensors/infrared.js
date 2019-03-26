@@ -23,15 +23,15 @@ const router = require('express').Router()
 
 const database = require('../../database')
 
-router.get('/lastOn', (req, res) => {
+router.get('/lastOn', async (req, res) => {
     res.send({
-        timestamp: database.sensors.infrared.lastOn()
+        timestamp: await database.sensors.infrared.lastOn()
     })
 })
 
-router.get('/lastOff', (req, res) => {
+router.get('/lastOff', async (req, res) => {
     res.send({
-        timestamp: database.sensors.infrared.lastOff()
+        timestamp: await database.sensors.infrared.lastOff()
     })
 })
 

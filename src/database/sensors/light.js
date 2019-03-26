@@ -29,17 +29,19 @@ module.exports = {
      * @param {Integer} id - The id of a light sensor in the database
      */
     getThreshold: (id) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from light where id = ?').get(id)
+            const sensor = db.prepare('select * from light where id = ?').get(id)
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Light sensor doesn\'t exist')
-        }
+            if (!sensor) {
+                reject(new Error('Light sensor doesn\'t exist'))
+            }
 
-        return row.threshold
+            resolve(sensor.threshold)
+        })
     },
     /**
      * @description Set the threshold for a light sensor
@@ -47,18 +49,21 @@ module.exports = {
      * @param {Integer} threshold - The new threshold value
      */
     setThreshold: (id, threshold) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from light where id = ?').get(id)
+            const sensor = db.prepare('select * from light where id = ?').get(id)
 
-        if (row === undefined) {
-            throw new Error('Light sensor doesn\'t exist')
-        }
+            if (!sensor) {
+                reject(new Error('Light sensor doesn\'t exist'))
+            }
 
-        if (threshold !== row.threshold) {
-            db.prepare('update light set threshold = ? where id = ?').run(threshold, id)
-        }
+            if (threshold !== sensor.threshold) {
+                db.prepare('update light set threshold = ? where id = ?').run(threshold, id)
+            }
 
-        db.close()
+            db.close()
+            resolve()
+        })
     }
 }

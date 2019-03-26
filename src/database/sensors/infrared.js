@@ -25,29 +25,33 @@ const config = require('../../config')
 
 module.exports = {
     lastOn: () => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select max(history.timestamp) from sensors join history on sensors.id = history.id where sensors.type = "infrared" and history.value != 0').get()
+            const row = db.prepare('select max(history.timestamp) from sensors join history on sensors.id = history.id where sensors.type = "infrared" and history.value != 0').get()
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Infrared sensor doesn\'t exist')
-        }
+            if (!row) {
+                reject(new Error('Infrared sensor doesn\'t exist'))
+            }
 
-        return row['max(history.timestamp)']
+            resolve(row['max(history.timestamp)'])
+        })
     },
     lastOff: () => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select max(history.timestamp) from sensors join history on sensors.id = history.id where sensors.type = "infrared" and history.value != 1').get()
+            const row = db.prepare('select max(history.timestamp) from sensors join history on sensors.id = history.id where sensors.type = "infrared" and history.value != 1').get()
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Infrared sensor doesn\'t exist')
-        }
+            if (!row) {
+                reject(new Error('Infrared sensor doesn\'t exist'))
+            }
 
-        return row['max(history.timestamp)']
+            resolve(row['max(history.timestamp)'])
+        })
     }
 }
