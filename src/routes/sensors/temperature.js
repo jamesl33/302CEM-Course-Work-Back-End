@@ -29,7 +29,7 @@ const database = require('../../database')
  * @route {GET} /threshold/min
  * @queryparam {Integer} - The id of a temperature sensor in the database
  */
-router.get('/threshold/min', (req, res) => {
+router.get('/threshold/min', async (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -37,7 +37,7 @@ router.get('/threshold/min', (req, res) => {
 
     try {
         return res.send({
-            threshold: database.sensors.temperature.getLowerThreshold(req.query.id)
+            threshold: await database.sensors.temperature.getLowerThreshold(req.query.id)
         })
     } catch (err) {
         // The requested light sensor was not found
@@ -51,7 +51,7 @@ router.get('/threshold/min', (req, res) => {
  * @route {GET} /threshold/max
  * @queryparam {Integer} - The id of a temperature sensor in the database
  */
-router.get('/threshold/max', (req, res) => {
+router.get('/threshold/max', async (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -59,7 +59,7 @@ router.get('/threshold/max', (req, res) => {
 
     try {
         return res.send({
-            threshold: database.sensors.temperature.getHigherThreshold(req.query.id)
+            threshold: await database.sensors.temperature.getHigherThreshold(req.query.id)
         })
     } catch (err) {
         // The requested light sensor was not found
@@ -73,7 +73,7 @@ router.get('/threshold/max', (req, res) => {
  * @route {GET} /thresholds
  * @queryparam {Integer} - The id of a temperature sensor in the database
  */
-router.get('/thresholds', (req, res) => {
+router.get('/thresholds', async (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -81,7 +81,7 @@ router.get('/thresholds', (req, res) => {
 
     try {
         res.send({
-            threshold: database.sensors.temperature.getThreshold(req.query.id)
+            threshold: await database.sensors.temperature.getThreshold(req.query.id)
         })
     } catch (err) {
         // The requested light sensor was not found
@@ -96,14 +96,14 @@ router.get('/thresholds', (req, res) => {
  * @bodyparam {Integer} - The id of the temperature sensor in the database
  * @bodyparam {Float} - The new lower threshold
  */
-router.post('/threshold/min', (req, res) => {
+router.post('/threshold/min', async (req, res) => {
     if (req.body.id === undefined || req.body.threshold === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
     }
 
     try {
-        database.sensors.temperature.setLowerThreshold(req.body.id, req.body.threshold)
+        await database.sensors.temperature.setLowerThreshold(req.body.id, req.body.threshold)
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)
@@ -119,14 +119,14 @@ router.post('/threshold/min', (req, res) => {
  * @bodyparam {Integer} - The id of the temperature sensor in the database
  * @bodyparam {Float} - The new higher threshold
  */
-router.post('/threshold/max', (req, res) => {
+router.post('/threshold/max', async (req, res) => {
     if (req.body.id === undefined || req.body.threshold === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
     }
 
     try {
-        database.sensors.temperature.setHigherThreshold(req.body.id, req.body.threshold)
+        await database.sensors.temperature.setHigherThreshold(req.body.id, req.body.threshold)
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)
@@ -143,14 +143,14 @@ router.post('/threshold/max', (req, res) => {
  * @bodyparam {Integer} lowerThrehold - The value to be set as the new lowerThrehold
  * @bodyparam {Integer} higherThrehold - The value to be set as the new higherThreshold
  */
-router.post('/thresholds', (req, res) => {
+router.post('/thresholds', async (req, res) => {
     if (req.body.id === undefined || req.body.lowerThrehold === undefined || req.body.higherThreshold === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
     }
 
     try {
-        database.sensors.temperature.setThreshold(req.body.id, req.body.lowerThrehold, req.body.higherThreshold)
+        await database.sensors.temperature.setThreshold(req.body.id, req.body.lowerThrehold, req.body.higherThreshold)
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)

@@ -29,7 +29,7 @@ const database = require('../../database')
  * @route {GET} /threshold
  * @queryparam {Integer} - The id of a light sensor in the database
  */
-router.get('/threshold', (req, res) => {
+router.get('/threshold', async (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -37,7 +37,7 @@ router.get('/threshold', (req, res) => {
 
     try {
         return res.send({
-            threshold: database.sensors.light.getThreshold(req.query.id)
+            threshold: await database.sensors.light.getThreshold(req.query.id)
         })
     } catch (err) {
         // The requested light sensor was not found
@@ -52,14 +52,14 @@ router.get('/threshold', (req, res) => {
  * @bodyparam {Integer} id - The id of the light, whose threshold we are setting
  * @bodyparam {Integer} threshold - The value to be set as the new threshold
  */
-router.post('/threshold', (req, res) => {
+router.post('/threshold', async (req, res) => {
     if (req.body.id === undefined || req.body.threshold === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
     }
 
     try {
-        database.sensors.light.setThreshold(req.body.id, req.body.threshold)
+        await database.sensors.light.setThreshold(req.body.id, req.body.threshold)
     } catch (err) {
         // The requested light sensor was not found
         return res.sendStatus(422)

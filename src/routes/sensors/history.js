@@ -31,7 +31,7 @@ const database = require('../../database')
  * @param {Integer} min - The lowest time to be collected from the database.
  * @param {Integer} max - The largest time to be collected from the database.
  */
-router.get('/byId', (req, res) => {
+router.get('/byId', async (req, res) => {
     if (req.query.id === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -49,7 +49,7 @@ router.get('/byId', (req, res) => {
     }
 
     try {
-        res.send(database.sensors.history.byId(req.query.id, min, max))
+        res.send(await database.sensors.history.byId(req.query.id, min, max))
     } catch (err) {
         // The requested sensor was not found
         return res.sendStatus(422)
@@ -64,7 +64,7 @@ router.get('/byId', (req, res) => {
  * @param {Integer} min - The lowest time to be collected from the database.
  * @param {Integer} max - The largest time to be collected from the database.
  */
-router.get('/byType', (req, res) => {
+router.get('/byType', async (req, res) => {
     if (req.query.type === undefined) {
         // The user didn't send enough data in the query params
         return res.sendStatus(422)
@@ -82,7 +82,7 @@ router.get('/byType', (req, res) => {
     }
 
     try {
-        res.send(database.sensors.history.byType(req.query.type, min, max))
+        res.send(await database.sensors.history.byType(req.query.type, min, max))
     } catch (err) {
         // The requested sensor was not found
         return res.sendStatus(422)

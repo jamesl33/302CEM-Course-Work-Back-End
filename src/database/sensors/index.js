@@ -34,76 +34,83 @@ module.exports = {
      * @param {Object} sensor - The sensor to be added to the database
      */
     add: (sensor) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve) => {
+            const db = new sqlite(config.database.name)
 
-        db.prepare('insert into sensors values(?, ?)').run(sensor.id, sensor.type)
+            db.prepare('insert into sensors values(?, ?)').run(sensor.id, sensor.type)
 
-        switch (sensor.type) {
-            case 'infrared':
-                db.prepare('insert into infrared values(?, 60)').run(sensor.id)
-                break;
-            case 'light':
-                db.prepare('insert into light values(?, 10000)').run(sensor.id)
-                break;
-            case 'temperature':
-                db.prepare('insert into temperature values(?, 0, 10000)').run(sensor.id)
-                break;
-        }
+            switch (sensor.type) {
+                case 'infrared':
+                    db.prepare('insert into infrared values(?, 60)').run(sensor.id)
+                    break;
+                case 'light':
+                    db.prepare('insert into light values(?, 10000)').run(sensor.id)
+                    break;
+                case 'temperature':
+                    db.prepare('insert into temperature values(?, 0, 10000)').run(sensor.id)
+                    break;
+            }
 
-        db.close()
+            db.close()
+            resolve()
+        })
     },
     /**
      * @description Search the database for a sensor
      * @param {Integer} - A sensor object
      */
     find: (sensor) => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve, reject) => {
+            const db = new sqlite(config.database.name)
 
-        const row = db.prepare('select * from sensors where id = ? and type = ?').get(sensor.id, sensor.type)
+            const dbSensor = db.prepare('select * from sensors where id = ? and type = ?').get(sensor.id, sensor.type)
 
-        db.close()
+            db.close()
 
-        if (row === undefined) {
-            throw new Error('Sensor doesn\'t exist')
-        }
+            if (!dbSensor) {
+                reject(new Error('Sensor doesn\'t exist'))
+            }
 
-        return row
+            resolve(dbSensor)
+        })
     },
     /**
      * @description Get all the user defined preferences for the sensors
      */
     preferences: () => {
-        const db = new sqlite(config.database.name)
+        return new Promise((resolve) => {
+            const db = new sqlite(config.database.name)
 
-        const infrared_sensors = db.prepare('select * from infrared').all()
-        const light_sensors = db.prepare('select * from light').all()
-        const temperature_sensors = db.prepare('select * from temperature').all()
+            const infrared_sensors = db.prepare('select * from infrared').all()
+            const light_sensors = db.prepare('select * from light').all()
+            const temperature_sensors = db.prepare('select * from temperature').all()
 
-        db.close()
+            db.close()
 
-        const preferences = {
-            light: {}
-        }
+            const preferences = {
+                light: {}
+            }
 
-        if (infrared_sensors !== undefined) {
-            Object.assign(preferences, {
-                infrared: infrared_sensors
-            })
-        }
+            if (infrared_sensors !== undefined) {
+                Object.assign(preferences, {
+                    infrared: infrared_sensors
+                })
+            }
 
-        if (light_sensors !== undefined) {
-            Object.assign(preferences, {
-                light: light_sensors
-            })
-        }
+            if (light_sensors !== undefined) {
+                Object.assign(preferences, {
+                    light: light_sensors
+                })
+            }
 
-        if (temperature_sensors !== undefined) {
-            Object.assign(preferences, {
-                temperature: temperature_sensors
-            })
-        }
+            if (temperature_sensors !== undefined) {
+                Object.assign(preferences, {
+                    temperature: temperature_sensors
+                })
+            }
 
-        return preferences
+            resolve(preferences)
+        })
     },
     history: history,
     infrared: infrared,

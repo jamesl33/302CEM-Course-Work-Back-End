@@ -35,17 +35,17 @@ client.on('connect', () => {
     })
 })
 
-client.on('message', (topic, message) => {
+client.on('message', async (topic, message) => {
     const sensor = {
         id: parseInt(topic.match(/(?<=sensor_)(\d)/).pop()),
         type: topic.match(/(?<=sensor_)([a-zA-z]+)/).pop()
     }
 
     try {
-        database.sensors.find(sensor)
+        await database.sensors.find(sensor)
     } catch (err) {
-        database.sensors.add(sensor)
+        await database.sensors.add(sensor)
     }
 
-    database.sensors.history.log(sensor.id, message.toString())
+    await database.sensors.history.log(sensor.id, message.toString())
 })

@@ -33,8 +33,8 @@ const temperature = require('./temperature')
  * @description Get all the user defined preferences for the sensors
  * @route {GET} /preferences
  */
-router.get('/preferences', (req, res) => {
-    res.send(database.sensors.preferences())
+router.get('/preferences', async (req, res) => {
+    res.send(await database.sensors.preferences())
 })
 
 router.use('/history', history)
