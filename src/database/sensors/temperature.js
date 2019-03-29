@@ -37,7 +37,7 @@ module.exports = {
             db.close()
 
             if (sensor == null) {
-                reject(new Error('Temperature sensor doesn\t exit'))
+                reject(new Error('Temperature sensor doesn\'t exist'))
             }
 
             resolve(sensor.lowerThreshold)
@@ -56,7 +56,7 @@ module.exports = {
             db.close()
 
             if (sensor == null) {
-                reject(new Error('Temperature sensor doesn\t exit'))
+                reject(new Error('Temperature sensor doesn\'t exist'))
             }
 
             resolve(sensor.higherThreshold)

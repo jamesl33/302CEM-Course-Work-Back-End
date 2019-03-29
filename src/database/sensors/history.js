@@ -75,7 +75,7 @@ module.exports = {
             const sensors = db.prepare('select * from sensors where type = ?').all(type)
 
             if (sensors.length === 0) {
-                reject(new Error('There are no sensors of type: ' + type))
+                reject(new Error(`There are no ${type} sensors`))
             }
 
             const history = db.prepare('select timestamp, value from history join sensors on history.id = sensors.id where type = ? and timestamp > ? and timestamp < ?').all(type, min, max)
