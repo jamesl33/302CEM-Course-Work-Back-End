@@ -52,7 +52,6 @@ router.get('/threshold', async (req, res) => {
  */
 router.post('/threshold', async (req, res) => {
     if (req.body.id == null) {
-        console.log('now')
         return res.status(422).send({ 'error': 'Missing body parameter: id' })
     }
 

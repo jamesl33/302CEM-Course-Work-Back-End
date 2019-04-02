@@ -19,13 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const mqtt = require('mqtt')
-
-const config = require('../config')
-
-module.exports = (io) => {
-    const client = mqtt.connect(config.mqtt)
-
+module.exports = (client, io) => {
     client.subscribe('302CEM/bear/#', (err) => {
         if (err) {
             console.log(err)

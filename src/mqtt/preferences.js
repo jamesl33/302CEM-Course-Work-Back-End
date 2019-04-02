@@ -20,13 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 'use strict'
 
 const cron = require('node-cron')
-const mqtt = require('mqtt')
 
-const config = require('../config')
 const database = require('../database')
 
-module.exports = async () => {
-    const client = mqtt.connect(config.mqtt)
+module.exports = async (client) => {
     const preferences = await database.sensors.preferences()
 
     cron.schedule('* * * * *', () => {

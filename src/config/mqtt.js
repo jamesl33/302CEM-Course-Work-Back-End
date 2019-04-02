@@ -27,5 +27,6 @@ module.exports = {
     password: 'n3fXXFZrjw',
     port: 8883,
     protocol: 'mqtts',
+    qos: 2,
     username: '302CEM'
 }

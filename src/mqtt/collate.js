@@ -19,33 +19,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict'
 
-const mqtt = require('mqtt')
-
 const database = require('../database')
 
-const config = require('../config')
-
-const client = mqtt.connect(config.mqtt)
-
-client.on('connect', () => {
+module.exports = (client) => {
     client.subscribe('302CEM/bear/#', (err) => {
         if (err) {
             console.log(err)
         }
     })
-})
 
-client.on('message', async (topic, message) => {
-    const sensor = {
-        id: parseInt(topic.match(/(?<=sensor_)(\d)/).pop()),
-        type: topic.match(/(?<=sensor_)([a-zA-z]+)/).pop()
-    }
+    client.on('message', async (topic, message) => {
+        const sensor = {
+            id: parseInt(topic.match(/(?<=sensor_)(\d)/).pop()),
+            type: topic.match(/(?<=sensor_)([a-zA-z]+)/).pop()
+        }
 
-    try {
-        await database.sensors.find(sensor)
-    } catch (err) {
-        await database.sensors.add(sensor)
-    }
+        try {
+            await database.sensors.find(sensor)
+        } catch (err) {
+            await database.sensors.add(sensor)
+        }
 
-    await database.sensors.history.log(sensor.id, message.toString())
-})
+        await database.sensors.history.log(sensor.id, message.toString())
+    })
+}

@@ -23,6 +23,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
 const https = require('https')
+const mqttClient = require('mqtt')
 const socket_io = require('socket.io')
 
 const config = require('./src/config')
@@ -38,15 +39,16 @@ const io = socket_io(server)
 
 const routes = require('./src/routes')
 
-// Initialise the mqtt tunnel
-mqtt.tunnel(io)
+const client = mqttClient.connect(config.mqtt)
 
-/**
- * Initialise the mqtt preferences publisher.
- *
- * This is a horrible bodge to avoid using HTTP/HTTPS on the ESP32
- */
-mqtt.preferences()
+// Initialise the mqtt tunnel
+mqtt.tunnel(client, io)
+
+// Collate the mqtt history
+mqtt.collate(client)
+
+// Initialise the mqtt preferences publisher.
+mqtt.preferences(client)
 
 // Base all routes on the api route
 app.use('/api', routes)
