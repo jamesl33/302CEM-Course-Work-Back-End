@@ -26,12 +26,10 @@ const config = require('../config')
 module.exports = (io) => {
     const client = mqtt.connect(config.mqtt)
 
-    client.on('connect', () => {
-        client.subscribe('302CEM/bear/#', (err) => {
-            if (err) {
-                console.log(err)
-            }
-        })
+    client.subscribe('302CEM/bear/#', (err) => {
+        if (err) {
+            console.log(err)
+        }
     })
 
     client.on('message', (topic, message) => {

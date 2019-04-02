@@ -19,8 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 require('./collate')
 
+const preferences = require('./preferences')
 const tunnel = require('./tunnel')
 
 module.exports = {
+    preferences: preferences,
     tunnel: tunnel
 }

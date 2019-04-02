@@ -41,6 +41,13 @@ const routes = require('./src/routes')
 // Initialise the mqtt tunnel
 mqtt.tunnel(io)
 
+/**
+ * Initialise the mqtt preferences publisher.
+ *
+ * This is a horrible bodge to avoid using HTTP/HTTPS on the ESP32
+ */
+mqtt.preferences()
+
 // Base all routes on the api route
 app.use('/api', routes)
 
