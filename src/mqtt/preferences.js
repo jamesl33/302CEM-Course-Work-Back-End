@@ -23,10 +23,10 @@ const cron = require('node-cron')
 
 const database = require('../database')
 
-module.exports = async (client) => {
-    const preferences = await database.sensors.preferences()
+module.exports = (client) => {
+    cron.schedule('* * * * *', async () => {
+        const preferences = await database.sensors.preferences()
 
-    cron.schedule('* * * * *', () => {
         preferences.light.map(light => {
             client.publish(`302CEM/bear/preferences/sensor_light/sensor_${light.id}/threshold`, `${light.threshold}`)
         })
