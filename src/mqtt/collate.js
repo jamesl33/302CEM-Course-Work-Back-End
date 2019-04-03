@@ -29,6 +29,11 @@ module.exports = (client) => {
     })
 
     client.on('message', async (topic, message) => {
+        if (topic.match(/preferences/)) {
+            // ignore the polling preferences
+            return
+        }
+
         const sensor = {
             id: parseInt(topic.match(/(?<=sensor_)(\d)/).pop()),
             type: topic.match(/(?<=sensor_)([a-zA-z]+)/).pop()
@@ -40,6 +45,10 @@ module.exports = (client) => {
             await database.sensors.add(sensor)
         }
 
-        await database.sensors.history.log(sensor.id, message.toString())
+        try {
+            await database.sensors.history.log(sensor.id, message.toString())
+        } catch (err) {
+            console.log(err)
+        }
     })
 }
