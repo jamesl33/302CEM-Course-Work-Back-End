@@ -41,13 +41,13 @@ module.exports = {
 
             switch (sensor.type) {
                 case 'infrared':
-                    db.prepare('insert into infrared values(?, 50)').run(sensor.id)
+                    db.prepare('insert into infrared values(?, 60000)').run(sensor.id)
                     break;
                 case 'light':
-                    db.prepare('insert into light values(?, 10000)').run(sensor.id)
+                    db.prepare('insert into light values(?, 200)').run(sensor.id)
                     break;
                 case 'temperature':
-                    db.prepare('insert into temperature values(?, 16, 24)').run(sensor.id)
+                    db.prepare('insert into temperature values(?, 25, 27)').run(sensor.id)
                     break;
             }
 
